@@ -1,0 +1,32 @@
+<resources>
+    <!-- Base -->
+    <string name="app_name">Cheftovers</string>
+    <string name="welcome">Welcome back, Chef!</string>
+    <string name="home">Home</string>
+    <string name="recipe_search">Recipe Search</string>
+    <string name="saved_recipes">Saved Recipes</string>
+    <string name="instructions_header">Instructions</string>
+    <string name="instructions_body">Click the button above to start the Recipe Search. Enter the ingredients you have available and submit to search for related recipes. Click on a recipe to view its details.</string>
+    <!-- Home Screen -->
+    <!-- Ingredient Search Screen -->
+    <string name="ingredient_list_head">Ingredient List</string>
+    <string name="ingredient_list_desc">Only enter one ingredient at a time. Tap an ingredient to remove it.</string>
+    <string name="ingredient_list_hint">Enter ingredient</string>
+    <string name="ingredient_current_list">Current List</string>
+    <string name="ingredient_results_button">Get Recipes</string>
+    <string name="ingredient_alert_title1">ERROR: Ingredient already in list</string>
+    <string name="ingredient_alert_title2">ERROR: Max list size reached</string>
+    <string name="ingredient_alert_title3">ERROR: No ingredients in list </string>
+    <string name="ingredient_alert_body1">Ingredient will not be added</string>
+    <string name="ingredient_alert_body2">Add at least 1 ingredient to continue</string>
+    <!-- Recipe Results Screen -->
+    <string name="recipe_results_head">Recipe Results</string>
+    <!-- Recipe Details Screen -->
+    <string name="time_to_cook">Time to Cook:</string>
+    <string name="ingredients">Ingredients:</string>
+    <string name="instructions">Instructions:</string>
+    <!-- Saved Recipes Screen -->
+    <!-- Buttons -->
+    <string name="button_enter">Enter</string>
+    <string name="button_ok">OK</string>
+</resources>

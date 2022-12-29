@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "546017863612",
+    "project_id": "cheftovers-13aed",
+    "storage_bucket": "cheftovers-13aed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546017863612:android:f0bd8c60f4e266694aedb9",
+        "android_client_info": {
+          "package_name": "com.example.cheftovers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546017863612-u5820esbi3lpghctjqdo2j1mlilqg7ae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAycQ5rLqvNTGfD3RxDyhRi_PKPy2Pd2B8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "546017863612-u5820esbi3lpghctjqdo2j1mlilqg7ae.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
