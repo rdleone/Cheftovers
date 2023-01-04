@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
-import com.example.cheftovers.data.populateFirestore
 import com.example.cheftovers.navigation.BottomNavBar
 import com.example.cheftovers.navigation.BottomNavItem
 import com.example.cheftovers.navigation.Navigation
@@ -25,12 +24,10 @@ import com.example.cheftovers.ui.theme.CheftoversTheme
 import com.example.cheftovers.ui.theme.secularoneFamily
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
+    @kotlin.OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val context: Context = applicationContext
-            populateFirestore(context)
             val navController = rememberNavController()
             CheftoversTheme {
                 // A surface container using the 'background' color from the theme
