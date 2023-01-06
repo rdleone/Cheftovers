@@ -67,7 +67,7 @@ fun SavedRecipesScreenComponents(
                 )
             }
         }
-        if(recipeUIState.savedRecipes.size == 0) {
+        if(recipeUIState.savedRecipes.isEmpty()) {
             // Display text describing how to save recipes
             descText = "Tap the star icon on a recipe to save it here!"
         }
@@ -89,7 +89,7 @@ fun SavedRecipesScreenComponents(
 //        To use for testing
 //        val recipes: List<Recipe> = List(3) { recipeSample() }
 
-        LazyColumn() {
+        LazyColumn {
             Log.i("savedRecipesScreen", "current saved recipes size: ${recipeUIState.savedRecipes.size}")
             items(items = recipeUIState.savedRecipes) { recipe ->
                 RecipeCard(onCardClicked = onCardClicked, recipe = recipe)

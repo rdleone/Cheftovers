@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.update
  * @param navController navigation controller that allows movement across screens
  */
 class RecipeViewModel(val navController: NavController) : ViewModel() {
+
     private val uiState = MutableStateFlow(RecipeUIState())
     val recipeUIStateStream: StateFlow<RecipeUIState>
         get() = uiState
@@ -32,10 +33,10 @@ class RecipeViewModel(val navController: NavController) : ViewModel() {
         )
         if (savedRecipesMutableList.contains(recipe)) {
             savedRecipesMutableList.remove(recipe)
-            uiState.update { it.copy(savedRecipes = savedRecipesMutableList.toList()) }
+            uiState.update { it.copy(savedRecipes = savedRecipesMutableList) }
         } else {
             savedRecipesMutableList.add(recipe)
-            uiState.update { it.copy(savedRecipes = savedRecipesMutableList.toList()) }
+            uiState.update { it.copy(savedRecipes = savedRecipesMutableList) }
         }
         uiState.value = recipeUIStateStream.value.copy()
         Log.i("onFavoriteClick", "size of recipes saved: ${uiState.value.savedRecipes.size}")

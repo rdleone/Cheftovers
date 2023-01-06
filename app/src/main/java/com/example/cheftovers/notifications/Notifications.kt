@@ -1,7 +1,5 @@
 package com.example.cheftovers.notifications
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text

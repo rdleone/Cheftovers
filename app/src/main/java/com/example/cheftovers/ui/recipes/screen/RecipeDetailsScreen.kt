@@ -102,12 +102,12 @@ fun RecipeDetailsScreen(
         }
         Image(
             modifier = modifier.recipeDetailsModifier(),
-            painter = painterResource(recipe.image),
+            painter = painterResource(recipe.images[0]),
             contentDescription = null
         )
         Text(
             modifier = modifier.recipeDetailsModifier(),
-            text = recipe.description,
+            text = recipe.desc,
         )
         Text(
             modifier = modifier.recipeDetailsModifier(),
@@ -124,7 +124,7 @@ fun RecipeDetailsScreen(
                 withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)) {
                     append(stringResource(R.string.ingredients))
                 }
-                append("\n" + recipe.ingredients.joinToString("\n"))
+                append("\n" + recipe.ingr.joinToString("\n"))
             }
         )
         Text(

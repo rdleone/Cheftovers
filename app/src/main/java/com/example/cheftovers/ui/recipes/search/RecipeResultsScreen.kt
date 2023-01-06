@@ -108,7 +108,8 @@ fun RecipeCard(
         ) {
             Image(
                 modifier = modifier.cardImageModifier(),
-                painter = painterResource(recipe.image),
+                // TODO: Replace hardcoded image
+                painter = painterResource(recipe.images[0]),
                 contentDescription = null,
             )
             Column {

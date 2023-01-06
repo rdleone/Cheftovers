@@ -1,7 +1,6 @@
 package com.example.cheftovers
 
 import android.os.Bundle
-import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -22,9 +21,11 @@ import com.example.cheftovers.navigation.Navigation
 import com.example.cheftovers.navigation.ScreenRoute
 import com.example.cheftovers.ui.theme.CheftoversTheme
 import com.example.cheftovers.ui.theme.secularoneFamily
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @kotlin.OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -46,7 +47,8 @@ class MainActivity : ComponentActivity() {
                                         fontSize = 32.sp,
                                         fontFamily = secularoneFamily,
                                         letterSpacing = 4.sp
-                                        )},
+                                    )
+                                },
                                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                                     containerColor = MaterialTheme.colorScheme.secondary
                                 )

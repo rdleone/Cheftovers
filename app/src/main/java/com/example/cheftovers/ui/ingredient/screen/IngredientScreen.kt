@@ -22,7 +22,7 @@ fun IngredientScreen(
     modifier: Modifier = Modifier,
     ingredientViewModel: IngredientViewModel
 ) {
-    val uiState by ingredientViewModel.ingredientUIStateStream.collectAsState()
+    val uiState by ingredientViewModel.ingrState.collectAsState()
     IngredientScreenComponents(
         uiState = uiState,
         onSearchClick = ingredientViewModel::onSearchClick

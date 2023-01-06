@@ -1,8 +1,10 @@
 package com.example.cheftovers.ui.ingredient.viewmodels
 
 /**
- * Data class for the ingredient view model that holds variables and adds getters automatically
+ * Ingredient screen state for ViewModel
  *
- * @param currentIngredientList navigation controller that allows movement across screens
+ * @property currentIngredientList Live list of ingredients entered by user
  */
-data class IngredientUIState(val currentIngredientList: MutableList<String> = arrayListOf())
+data class IngredientUIState(
+    val currentIngredientList: MutableList<String> = arrayListOf()
+)
