@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.cheftovers.data.Recipe
-import com.example.cheftovers.navigation.ScreenRoute
+import com.example.cheftovers.util.Routes
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -48,12 +48,12 @@ class RecipeViewModel(val navController: NavController) : ViewModel() {
 //        } else {
 //            navController.navigate(ScreenRoute.SavedRecipesScreen.route)
 //        }
-        navController.navigate(ScreenRoute.RecipeResultsScreen.route)
+        navController.navigate(Routes.RecipeResultsScreen)
 
     }
 
     fun onCardClicked() {
-        navController.navigate(ScreenRoute.RecipeDetailsScreen.route)
+        navController.navigate(Routes.RecipeDetailsScreen)
     }
 
 }

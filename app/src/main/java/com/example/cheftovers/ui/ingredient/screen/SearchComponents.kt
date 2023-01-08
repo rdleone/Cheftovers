@@ -33,22 +33,21 @@ import com.example.cheftovers.R
 import com.example.cheftovers.ui.ingredient.viewmodels.IngredientUIState
 
 /**
+ * Subset of IngredientScreen.
  * Contains the search bar, submit button, and current list
- * of ingredients for the Ingredient Search screen.
+ * of ingredients for the IngredientSearch screen.
  *
  * @param modifier          Default modifier
- * @param hint              Placeholder text in search bar
- * @param list              Active list of ingredients on this screen
  * @param uiState           The finalized state of the ingredient list
  * @param onSearchClick     Executes the recipe search with the current ingredient list
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchComponents(
-    modifier: Modifier = Modifier,
-    hint: String,
     uiState: IngredientUIState,
-    onSearchClick: (MutableList<String>) -> Unit
+    onEvent: (IngredientEvent) -> Unit,
+//    onSearchClick: (MutableList<String>) -> Unit,
+    modifier: Modifier
 ) {
     // Current ingredient list
     val list = remember { mutableStateListOf<String>() }
@@ -65,12 +64,12 @@ fun SearchComponents(
     ) {
         // Search Bar
         TextField(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 16.dp)
                 .shadow(4.dp, CircleShape),
             value = text,
-            placeholder = { Text(text = hint) },
+            placeholder = { Text(text = stringResource(R.string.ingredient_list_hint)) },
             onValueChange = { text = it },
             maxLines = 1,
             singleLine = true,
@@ -134,7 +133,7 @@ fun SearchComponents(
     ) {
         // Current ingredient list displayed in 2 columns
         LazyVerticalGrid(
-            modifier = Modifier.weight(1f),
+            modifier = modifier.weight(1f),
             columns = GridCells.Fixed(2),
         ) {
             items(list) { item ->
@@ -155,7 +154,7 @@ fun SearchComponents(
                 }
                 // Each ingredient can be clicked to be removed
                 ClickableText(
-                    modifier = Modifier
+                    modifier = modifier
                         .padding(10.dp),
                     text = AnnotatedString(item),
                     style = MaterialTheme.typography.bodyLarge +
@@ -166,7 +165,7 @@ fun SearchComponents(
         }
         // Button to initiate recipe search with current ingredient list
         Button(
-            modifier = Modifier
+            modifier = modifier
                 .padding(16.dp),
             onClick = {
                 if (list.size == 0) {
@@ -176,7 +175,8 @@ fun SearchComponents(
                     for (item in list) {
                         uiState.currentIngredientList.add(item)
                     }
-                    onSearchClick(uiState.currentIngredientList)
+                    onEvent(IngredientEvent.onFindRecipes(uiState.currentIngredientList))
+                    //onSearchClick(uiState.currentIngredientList)
                 }
             },
             shape = RectangleShape
@@ -197,8 +197,8 @@ fun SearchComponents(
 @Preview(showBackground = true)
 @Composable
 fun SearchComponents() {
-    IngredientScreenComponents(
-        onSearchClick = {},
-        uiState = IngredientUIState()
-    )
+//    IngredientScreenComponents(
+//        onSearchClick = {},
+//        uiState = IngredientUIState()
+//    )
 }

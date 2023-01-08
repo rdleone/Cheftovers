@@ -15,10 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
-import com.example.cheftovers.navigation.BottomNavBar
-import com.example.cheftovers.navigation.BottomNavItem
-import com.example.cheftovers.navigation.Navigation
-import com.example.cheftovers.navigation.ScreenRoute
+import com.example.cheftovers.util.BottomNavBar
+import com.example.cheftovers.util.BottomNavItem
+import com.example.cheftovers.util.Navigation
+import com.example.cheftovers.util.Routes
 import com.example.cheftovers.ui.theme.CheftoversTheme
 import com.example.cheftovers.ui.theme.secularoneFamily
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,8 +29,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
             CheftoversTheme {
+                val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -60,17 +60,17 @@ class MainActivity : ComponentActivity() {
                                 items = listOf(
                                     BottomNavItem(
                                         name = stringResource(R.string.home),
-                                        route = ScreenRoute.HomeScreen.route,
+                                        route = Routes.HomeScreen,
                                         icon = Icons.Default.Home
                                     ),
                                     BottomNavItem(
                                         name = stringResource(R.string.recipe_search),
-                                        route = ScreenRoute.IngredientScreen.route,
+                                        route = Routes.IngredientScreen,
                                         icon = Icons.Default.Search
                                     ),
                                     BottomNavItem(
                                         name = stringResource(R.string.saved_recipes),
-                                        route = ScreenRoute.SavedRecipesScreen.route,
+                                        route = Routes.SavedRecipesScreen,
                                         icon = Icons.Default.Star
                                     ),
                                 ),

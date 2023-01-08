@@ -2,7 +2,7 @@ package com.example.cheftovers.ui.home.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.example.cheftovers.navigation.ScreenRoute
+import com.example.cheftovers.util.Routes
 
 /**
  * Handles logic for any buttons on the home screen, specifically the ingredient search button
@@ -12,6 +12,6 @@ import com.example.cheftovers.navigation.ScreenRoute
 class HomeScreenViewModel(val navController: NavController) : ViewModel() {
 
     fun onIngredientSearchClick() {
-        navController.navigate(ScreenRoute.IngredientScreen.route)
+        navController.navigate(Routes.IngredientScreen)
     }
 }

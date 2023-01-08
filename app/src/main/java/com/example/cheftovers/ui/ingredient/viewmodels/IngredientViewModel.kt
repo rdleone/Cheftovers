@@ -2,11 +2,17 @@ package com.example.cheftovers.ui.ingredient.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
-import com.example.cheftovers.navigation.ScreenRoute
+import androidx.lifecycle.viewModelScope
+import com.example.cheftovers.ui.ingredient.screen.IngredientEvent
+import com.example.cheftovers.util.Routes
+import com.example.cheftovers.util.UiEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 /**
  * Handles logic for any buttons on the ingredient search screen, specifically the search button
@@ -14,15 +20,41 @@ import kotlinx.coroutines.flow.update
  *
  * @param navController navigation controller that allows movement across screens
  */
-class IngredientViewModel(val navController: NavController) : ViewModel() {
+class IngredientViewModel() : ViewModel() {
 
     private val _ingrState = MutableStateFlow(IngredientUIState())
     val ingrState: StateFlow<IngredientUIState>
         get() = _ingrState
 
-    fun onSearchClick(list: MutableList<String>) {
-        _ingrState.update { it.copy(currentIngredientList = list) }
-        Log.i("onSearchClick", "current list size: ${_ingrState.value.currentIngredientList.size}")
-        navController.navigate(ScreenRoute.RecipeResultsScreen.route)
+    private val _uiEvent = Channel<UiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
+
+    fun onEvent(event: IngredientEvent) {
+        when(event) {
+            is IngredientEvent.AddIngredient -> {
+                event.ingrList.add(event.ingredient)
+                _ingrState.update { it.copy(event.ingrList)}
+                Log.i("ingrEvent", "Ingredient added: ${_ingrState.value.currentIngredientList.size}")
+            }
+            is IngredientEvent.RemoveIngredient -> {
+                event.ingrList.remove(event.ingredient)
+                _ingrState.update { it.copy(event.ingrList) }
+                Log.i("ingrEvent", "Ingredient removed: ${_ingrState.value.currentIngredientList.size}")
+            }
+            is IngredientEvent.onFindRecipes -> {
+                // It seems that update doesn't remove the old values in the list.
+                // Is this because we're updating it with .copy() ?
+//                _ingrState.update { it.copy(event.ingrList) }
+                Log.i("ingrEvent", "Final list size: ${_ingrState.value.currentIngredientList.size}")
+                // TODO: Investigate why list doesn't delete old values upon update
+                sendUiEvent(UiEvent.Navigate(Routes.RecipeResultsScreen))
+            }
+        }
+    }
+
+    private fun sendUiEvent(event: UiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(event)
+        }
     }
 }

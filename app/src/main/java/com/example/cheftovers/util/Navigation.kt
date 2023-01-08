@@ -1,4 +1,4 @@
-package com.example.cheftovers.navigation
+package com.example.cheftovers.util
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.*
@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -28,22 +29,26 @@ import com.example.cheftovers.ui.recipes.viewmodels.RecipeViewModel
 /**
  * Functionality for navigation between each screen, uses navController
  *
- * Note: Routes are located in navigation/ScreenNavigationInfo.kt
  */
 @Composable
 fun Navigation(navController: NavHostController) {
     val recipeViewModel = RecipeViewModel(navController)
     val recipeUIState by recipeViewModel.recipeUIStateStream.collectAsState()
-    NavHost(navController = navController, startDestination = ScreenRoute.HomeScreen.route) {
-        composable(route = ScreenRoute.HomeScreen.route) {
+    NavHost(navController = navController, startDestination = Routes.HomeScreen) {
+        composable(route = Routes.HomeScreen) {
             HomeScreen(homeScreenViewModel = HomeScreenViewModel(navController))
         }
-        composable(route = ScreenRoute.IngredientScreen.route) {
-            IngredientScreen(ingredientViewModel = IngredientViewModel(navController = navController)) }
-        composable(route = ScreenRoute.RecipeResultsScreen.route) {
+        composable(Routes.IngredientScreen) {
+            IngredientScreen(
+                viewModel = viewModel<IngredientViewModel>(),
+                onNavigate = {
+                    navController.navigate(it.route)
+                }
+            ) }
+        composable(route = Routes.RecipeResultsScreen) {
             RecipeResultsScreen(recipeViewModel = recipeViewModel)
         }
-        composable(route = ScreenRoute.RecipeDetailsScreen.route) {
+        composable(route = Routes.RecipeDetailsScreen) {
             // So the recipe details screen has a Recipe param, which makes sense.
             // But it needs to be passed a recipe here for the navigation to work.
             // I have the sample here for now, but idk what we would replace this
@@ -51,7 +56,7 @@ fun Navigation(navController: NavHostController) {
             // selected to pass into here?
             RecipeDetails(recipe = recipeSample(), savedRecipeViewModel = recipeViewModel)
         }
-        composable(route = ScreenRoute.SavedRecipesScreen.route) {
+        composable(route = Routes.SavedRecipesScreen) {
             SavedRecipesScreen(recipeViewModel = recipeViewModel,
                 recipeUIState = recipeUIState)
         }
