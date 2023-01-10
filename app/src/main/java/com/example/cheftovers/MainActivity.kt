@@ -1,7 +1,6 @@
 package com.example.cheftovers
 
 import android.os.Bundle
-import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -16,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
-import com.example.cheftovers.data.populateFirestore
 import com.example.cheftovers.navigation.BottomNavBar
 import com.example.cheftovers.navigation.BottomNavItem
 import com.example.cheftovers.navigation.Navigation
@@ -29,8 +27,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val context: Context = applicationContext
-            populateFirestore(context)
             val navController = rememberNavController()
             CheftoversTheme {
                 // A surface container using the 'background' color from the theme
