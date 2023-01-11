@@ -15,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
+import com.example.cheftovers.ui.theme.CheftoversTheme
+import com.example.cheftovers.ui.theme.secularoneFamily
 import com.example.cheftovers.util.BottomNavBar
 import com.example.cheftovers.util.BottomNavItem
 import com.example.cheftovers.util.Navigation
 import com.example.cheftovers.util.Routes
-import com.example.cheftovers.ui.theme.CheftoversTheme
-import com.example.cheftovers.ui.theme.secularoneFamily
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -74,7 +74,9 @@ class MainActivity : ComponentActivity() {
                                         icon = Icons.Default.Star
                                     ),
                                 ),
-                                onItemClick = { navController.navigate(it.route) })
+                                onItemClick = {
+                                    navController.navigate(it.route)
+                                })
                         }
                     ) { innerPadding ->
                         Box(modifier = Modifier.padding(innerPadding)) {

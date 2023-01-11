@@ -1,4 +1,4 @@
-package com.example.cheftovers.ui.recipes.screen
+package com.example.cheftovers.ui.recipe_details
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -11,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -24,37 +25,38 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
 import com.example.cheftovers.R
 import com.example.cheftovers.data.Recipe
 import com.example.cheftovers.data.recipeSample
-import com.example.cheftovers.ui.recipes.viewmodels.RecipeUIState
-import com.example.cheftovers.ui.recipes.viewmodels.RecipeViewModel
 import com.example.cheftovers.ui.theme.frameModifier
 import com.example.cheftovers.ui.theme.recipeDetailsModifier
+import com.example.cheftovers.util.UiEvent
 
-@Composable
-fun RecipeDetails(
-    savedRecipeViewModel: RecipeViewModel,
-    recipe: Recipe,
-) {
-    val uiState by savedRecipeViewModel.recipeUIStateStream.collectAsState()
-    RecipeDetailsScreen(
-        recipe = recipe,
-        uiState = uiState,
-        onFavoriteClick = savedRecipeViewModel::onFavoriteClick,
-        onBackPressed = savedRecipeViewModel::onBackPressed
-    )
-}
-
+/**
+ * Screen that displays the expanded details of the recipe selected
+ * by the user, as well as an option to save the recipe.
+ *
+ * @param viewModel Top level screen ViewModel
+ * @param onNavigate Used by NavHost in nav map
+ * @param recipe The selected recipe whose details populate this screen
+ * @param modifier Default Modifier to allow compose components to have modifications
+ */
 @Composable
 fun RecipeDetailsScreen(
-    modifier: Modifier = Modifier,
+    viewModel: RecipeDetailsViewModel,
+    onNavigate: (UiEvent.Navigate) -> Unit,
     recipe: Recipe,
-    uiState: RecipeUIState,
-    onFavoriteClick: (Recipe) -> Unit,
-    onBackPressed: () -> Unit
+    modifier: Modifier = Modifier
 ) {
+    val uiState by viewModel.recipeUIState.collectAsState()
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UiEvent.Navigate -> onNavigate(event)
+                else -> Unit
+            }
+        }
+    }
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
@@ -72,7 +74,7 @@ fun RecipeDetailsScreen(
                 imageVector = Icons.Filled.KeyboardArrowLeft,
                 modifier = Modifier
                     .size(36.dp)
-                    .clickable { onBackPressed() },
+                    .clickable { viewModel.onEvent(RecipeDetailsEvent.OnBack) },
                 contentDescription = ""
             )
             Text(
@@ -87,7 +89,8 @@ fun RecipeDetailsScreen(
                     painter = painterResource(id = R.drawable.star_filled),
                     modifier = Modifier
                         .size(36.dp)
-                        .clickable { onFavoriteClick(recipe) },
+                        .clickable { viewModel.onEvent(
+                            RecipeDetailsEvent.OnFavorite(recipe, uiState.savedRecipes)) },
                     contentDescription = ""
                 )
             } else {
@@ -95,7 +98,8 @@ fun RecipeDetailsScreen(
                     painter = painterResource(id = R.drawable.star_outline),
                     modifier = Modifier
                         .size(36.dp)
-                        .clickable { onFavoriteClick(recipe) },
+                        .clickable { viewModel.onEvent(
+                            RecipeDetailsEvent.OnFavorite(recipe, uiState.savedRecipes)) },
                     contentDescription = ""
                 )
             }
@@ -115,7 +119,7 @@ fun RecipeDetailsScreen(
                 withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)) {
                     append(stringResource(R.string.time_to_cook))
                 }
-                append("\n"+recipe.time)
+                append("\n" + recipe.time)
             }
         )
         Text(
@@ -133,17 +137,35 @@ fun RecipeDetailsScreen(
                 withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)) {
                     append(stringResource(R.string.instructions))
                 }
-                append("\n"+recipe.steps.joinToString("\n"))
+                append("\n" + recipe.steps.joinToString("\n"))
             }
         )
     }
+//    RecipeDetailsComponents(
+//        recipe = recipe,
+//        uiState = uiState,
+//        onFavoriteClick = viewModel::onFavoriteClick,
+//        onBackPressed = viewModel::onBackPressed
+//    )
 }
+
+//@Composable
+//fun RecipeDetailsComponents(
+//    modifier: Modifier = Modifier,
+//    recipe: Recipe,
+//    uiState: RecipeDetailsUIState,
+//    onFavoriteClick: (Recipe) -> Unit,
+//    onBackPressed: () -> Unit
+//) {
+//
+//}
 
 @Preview(showBackground = true)
 @Composable
 fun RecipeDetailsScreenPreview() {
-    RecipeDetails(
-        recipe = recipeSample(),
-        savedRecipeViewModel = RecipeViewModel(rememberNavController())
+    RecipeDetailsScreen(
+        viewModel = RecipeDetailsViewModel(),
+        onNavigate = {},
+        recipe = recipeSample()
     )
 }

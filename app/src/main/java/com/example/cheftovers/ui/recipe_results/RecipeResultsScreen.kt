@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -20,33 +21,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cheftovers.R
 import com.example.cheftovers.data.Recipe
-import com.example.cheftovers.data.recipeSample
-import com.example.cheftovers.ui.recipes.viewmodels.RecipeUIState
-import com.example.cheftovers.ui.recipes.viewmodels.RecipeViewModel
+import com.example.cheftovers.ui.recipe_results.RecipeResultsEvent
+import com.example.cheftovers.ui.recipe_results.RecipeResultsViewModel
 import com.example.cheftovers.ui.theme.cardImageModifier
 import com.example.cheftovers.ui.theme.frameModifier
+import com.example.cheftovers.util.UiEvent
 
 @Composable
 fun RecipeResultsScreen(
-    modifier: Modifier = Modifier,
     // TODO: Replace dummy data
-    recipeViewModel: RecipeViewModel,
-) {
-    val uiState by recipeViewModel.recipeUIStateStream.collectAsState()
-    RecipeResultsComponents(
-        uiState = uiState,
-        onCardClicked = recipeViewModel::onCardClicked
-    )
-}
-
-@Composable
-fun RecipeResultsComponents(
+    viewModel: RecipeResultsViewModel,
+    onNavigate: (UiEvent.Navigate) -> Unit,
     modifier: Modifier = Modifier,
-    uiState: RecipeUIState,
-    // TODO: Replace dummy data
-    onCardClicked: () -> Unit,
-    recipes: List<Recipe> = List(10) { recipeSample() }
 ) {
+    val uiState by viewModel.recipeResultsState.collectAsState()
+//    val context = LocalContext.current
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UiEvent.Navigate -> onNavigate(event)
+                else -> Unit
+            }
+        }
+    }
     Column(modifier = modifier.fillMaxSize()) {
         Row(
             modifier = Modifier.frameModifier(),
@@ -59,27 +56,67 @@ fun RecipeResultsComponents(
             )
         }
         LazyColumn {
-            items(items = recipes) { recipe ->
-                RecipeCard(onCardClicked = onCardClicked, recipe = recipe)
+            items(items = uiState.recipes) { recipe ->
+                RecipeCard(
+                    onCardClicked = {
+                        viewModel.onEvent(
+                            RecipeResultsEvent.OnCardClick(recipe)
+                        )
+                    },
+                    recipe = recipe,
+                    modifier = modifier
+                )
             }
         }
     }
+
+//    RecipeResultsComponents(
+//        uiState = uiState,
+//        onCardClicked = recipeViewModel::onCardClicked
+//    )
 }
+
+//@Composable
+//fun RecipeResultsComponents(
+//    modifier: Modifier = Modifier,
+//    uiState: RecipeUIState,
+//    // TODO: Replace dummy data
+//    onCardClicked: () -> Unit,
+//    recipes: List<Recipe> = List(10) { recipeSample() }
+//) {
+//    Column(modifier = modifier.fillMaxSize()) {
+//        Row(
+//            modifier = Modifier.frameModifier(),
+//            horizontalArrangement = Arrangement.Center,
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Text(
+//                text = stringResource(R.string.recipe_results_head),
+//                style = MaterialTheme.typography.headlineLarge
+//            )
+//        }
+//        LazyColumn {
+//            items(items = recipes) { recipe ->
+//                RecipeCard(onCardClicked = onCardClicked, recipe = recipe)
+//            }
+//        }
+//    }
+//}
 
 /**
  * Card displaying recipe data. When clicked, navigates user to
  * its recipe details page.
  *
- * @param modifier      Default Modifier
- * @param navController Host NavController
- * @param recipe        Recipe to display
+ * @param onCardClicked Handles navigation to corresponding Recipe Details screen
+ * @param recipe Recipe represented by this card
+ * @param modifier Default modifier
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeCard(
-    modifier: Modifier = Modifier,
     onCardClicked: () -> Unit,
-    recipe: Recipe
+    recipe: Recipe,
+    modifier: Modifier,
 ) {
     Card(
         modifier = Modifier
@@ -135,5 +172,8 @@ fun RecipeCard(
 @Preview(showBackground = true)
 @Composable
 fun RecipeResultsPreview() {
-//    RecipeResultsScreen(navController = rememberNavController())
+    RecipeResultsScreen(
+        viewModel = RecipeResultsViewModel(),
+        onNavigate = {}
+    )
 }

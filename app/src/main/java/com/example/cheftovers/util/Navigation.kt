@@ -3,8 +3,6 @@ package com.example.cheftovers.util
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -18,47 +16,52 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.cheftovers.data.recipeSample
 import com.example.cheftovers.ui.home.HomeScreen
-import com.example.cheftovers.ui.home.viewmodels.HomeScreenViewModel
-import com.example.cheftovers.ui.ingredient.screen.IngredientScreen
-import com.example.cheftovers.ui.ingredient.viewmodels.IngredientViewModel
-import com.example.cheftovers.ui.recipes.screen.RecipeDetails
+import com.example.cheftovers.ui.home.HomeViewModel
+import com.example.cheftovers.ui.ingredient.IngredientScreen
+import com.example.cheftovers.ui.ingredient.IngredientViewModel
+import com.example.cheftovers.ui.recipe_details.RecipeDetailsScreen
+import com.example.cheftovers.ui.recipe_details.RecipeDetailsViewModel
+import com.example.cheftovers.ui.recipe_results.RecipeResultsViewModel
 import com.example.cheftovers.ui.recipes.screen.SavedRecipesScreen
 import com.example.cheftovers.ui.recipes.search.RecipeResultsScreen
-import com.example.cheftovers.ui.recipes.viewmodels.RecipeViewModel
+import com.example.cheftovers.ui.saved_recipes.SavedRecipesViewModel
 
 /**
- * Functionality for navigation between each screen, uses navController
- *
+ * Functionality for navigation between each screen using host navController
  */
 @Composable
 fun Navigation(navController: NavHostController) {
-    val recipeViewModel = RecipeViewModel(navController)
-    val recipeUIState by recipeViewModel.recipeUIStateStream.collectAsState()
     NavHost(navController = navController, startDestination = Routes.HomeScreen) {
         composable(route = Routes.HomeScreen) {
-            HomeScreen(homeScreenViewModel = HomeScreenViewModel(navController))
+            HomeScreen(
+                viewModel = viewModel<HomeViewModel>(),
+                onNavigate = { navController.navigate(it.route) }
+            )
         }
         composable(Routes.IngredientScreen) {
             IngredientScreen(
                 viewModel = viewModel<IngredientViewModel>(),
-                onNavigate = {
-                    navController.navigate(it.route)
-                }
-            ) }
+                onNavigate = { navController.navigate(it.route) }
+            )
+        }
         composable(route = Routes.RecipeResultsScreen) {
-            RecipeResultsScreen(recipeViewModel = recipeViewModel)
+            RecipeResultsScreen(
+                viewModel = viewModel<RecipeResultsViewModel>(),
+                onNavigate = { navController.navigate(it.route) }
+            )
         }
         composable(route = Routes.RecipeDetailsScreen) {
-            // So the recipe details screen has a Recipe param, which makes sense.
-            // But it needs to be passed a recipe here for the navigation to work.
-            // I have the sample here for now, but idk what we would replace this
-            // with in the future. Maybe we need to get the ID of the recipe
-            // selected to pass into here?
-            RecipeDetails(recipe = recipeSample(), savedRecipeViewModel = recipeViewModel)
+            RecipeDetailsScreen(
+                viewModel = viewModel<RecipeDetailsViewModel>(),
+                onNavigate = { navController.navigate(it.route) },
+                recipe = recipeSample()
+            )
         }
         composable(route = Routes.SavedRecipesScreen) {
-            SavedRecipesScreen(recipeViewModel = recipeViewModel,
-                recipeUIState = recipeUIState)
+            SavedRecipesScreen(
+                viewModel = viewModel<SavedRecipesViewModel>(),
+                onNavigate = { navController.navigate(it.route) }
+            )
         }
     }
 }
@@ -95,7 +98,8 @@ fun BottomNavBar(
                 selected = selected,
                 onClick = { onItemClick(item) },
                 colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = MaterialTheme.colorScheme.onSecondary),
+                    indicatorColor = MaterialTheme.colorScheme.onSecondary
+                ),
                 icon = {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(

@@ -1,4 +1,4 @@
-package com.example.cheftovers.ui.ingredient.screen
+package com.example.cheftovers.ui.ingredient
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -30,7 +30,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cheftovers.R
-import com.example.cheftovers.ui.ingredient.viewmodels.IngredientUIState
 
 /**
  * Subset of IngredientScreen.

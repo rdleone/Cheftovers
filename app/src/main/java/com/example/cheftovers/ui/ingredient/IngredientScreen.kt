@@ -1,4 +1,4 @@
-package com.example.cheftovers.ui.ingredient.screen
+package com.example.cheftovers.ui.ingredient
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -29,26 +29,38 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
 import com.example.cheftovers.R
-import com.example.cheftovers.ui.ingredient.viewmodels.IngredientUIState
-import com.example.cheftovers.ui.ingredient.viewmodels.IngredientViewModel
 import com.example.cheftovers.ui.theme.frameModifier
 import com.example.cheftovers.util.UiEvent
 
+/**
+ * Ingredient List screen in which users create a list of ingredients
+ * to use in the Recipe Search.
+ *
+ * @param onNavigate Used by NavHost in nav map
+ * @param viewModel Top level screen ViewModel
+ * @param modifier Default modifier
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IngredientScreen(
-    onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: IngredientViewModel,
-//    onEvent: (IngredientEvent) -> Unit,
+    onNavigate: (UiEvent.Navigate) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.ingrState.collectAsState()
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
-            when(event) {
+            when (event) {
                 is UiEvent.Navigate -> onNavigate(event)
+                is UiEvent.ShowToast -> {
+                    Toast.makeText(
+                        context,
+                        event.message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
                 else -> Unit
             }
         }
@@ -191,18 +203,18 @@ fun IngredientScreen(
             ) {
                 items(uiState.currentIngredientList) { item ->
                     if (isDuplicate) {
-                        Toast.makeText(
-                            LocalContext.current,
-                            stringResource(R.string.ingredient_alert_title1),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        viewModel.onEvent(
+                            IngredientEvent.onEntryError(
+                                stringResource(R.string.ingredient_alert_title1)
+                            )
+                        )
                         isDuplicate = false
                     } else if (isMaxListSize) {
-                        Toast.makeText(
-                            LocalContext.current,
-                            stringResource(R.string.ingredient_alert_title2),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        viewModel.onEvent(
+                            IngredientEvent.onEntryError(
+                                stringResource(R.string.ingredient_alert_title2)
+                            )
+                        )
                         isMaxListSize = false
                     }
                     // Each ingredient can be clicked to be removed
@@ -215,7 +227,10 @@ fun IngredientScreen(
                         onClick = {
 //                            list.remove(item)
                             viewModel.onEvent(
-                                IngredientEvent.RemoveIngredient(item, uiState.currentIngredientList)
+                                IngredientEvent.RemoveIngredient(
+                                    item,
+                                    uiState.currentIngredientList
+                                )
                             )
                         }
                     )
@@ -229,24 +244,20 @@ fun IngredientScreen(
                     if (uiState.currentIngredientList.size == 0) {
                         isListEmpty = true
                     } else {
-//                        // Add ingredients from List to UIState
-//                        for (item in uiState.currentIngredientList) {
-//                            uiState.currentIngredientList.add(item)
-//                        }
                         viewModel.onEvent(
-                            IngredientEvent.onFindRecipes(uiState.currentIngredientList))
-                        //onSearchClick(uiState.currentIngredientList)
+                            IngredientEvent.onFindRecipes(uiState.currentIngredientList)
+                        )
                     }
                 },
                 shape = RectangleShape
             ) {
                 Text(text = stringResource(R.string.ingredient_results_button))
                 if (isListEmpty) {
-                    Toast.makeText(
-                        LocalContext.current,
-                        stringResource(R.string.ingredient_alert_title3),
-                        Toast.LENGTH_LONG
-                    ).show()
+                    viewModel.onEvent(
+                        IngredientEvent.onEntryError(
+                            stringResource(R.string.ingredient_alert_title3)
+                        )
+                    )
                     isListEmpty = false
                 }
             }
@@ -301,7 +312,8 @@ fun IngredientScreen(
 @Preview(showBackground = true)
 @Composable
 fun IngredientScreenPreview() {
-//    IngredientScreen(
-//        viewModel = IngredientViewModel(navController = rememberNavController()),
-//    )
+    IngredientScreen(
+        viewModel = IngredientViewModel(),
+        onNavigate = {}
+    )
 }
