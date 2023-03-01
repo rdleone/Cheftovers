@@ -1,7 +1,6 @@
 package com.example.cheftovers
 
 import android.os.Bundle
-import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -16,23 +15,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
-import com.example.cheftovers.data.populateFirestore
-import com.example.cheftovers.navigation.BottomNavBar
-import com.example.cheftovers.navigation.BottomNavItem
-import com.example.cheftovers.navigation.Navigation
-import com.example.cheftovers.navigation.ScreenRoute
 import com.example.cheftovers.ui.theme.CheftoversTheme
 import com.example.cheftovers.ui.theme.secularoneFamily
+import com.example.cheftovers.util.BottomNavBar
+import com.example.cheftovers.util.BottomNavItem
+import com.example.cheftovers.util.Navigation
+import com.example.cheftovers.util.Routes
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val context: Context = applicationContext
-            populateFirestore(context)
-            val navController = rememberNavController()
             CheftoversTheme {
+                val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -49,7 +47,8 @@ class MainActivity : ComponentActivity() {
                                         fontSize = 32.sp,
                                         fontFamily = secularoneFamily,
                                         letterSpacing = 4.sp
-                                        )},
+                                    )
+                                },
                                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                                     containerColor = MaterialTheme.colorScheme.secondary
                                 )
@@ -61,21 +60,23 @@ class MainActivity : ComponentActivity() {
                                 items = listOf(
                                     BottomNavItem(
                                         name = stringResource(R.string.home),
-                                        route = ScreenRoute.HomeScreen.route,
+                                        route = Routes.HomeScreen,
                                         icon = Icons.Default.Home
                                     ),
                                     BottomNavItem(
                                         name = stringResource(R.string.recipe_search),
-                                        route = ScreenRoute.IngredientScreen.route,
+                                        route = Routes.IngredientScreen,
                                         icon = Icons.Default.Search
                                     ),
                                     BottomNavItem(
                                         name = stringResource(R.string.saved_recipes),
-                                        route = ScreenRoute.SavedRecipesScreen.route,
+                                        route = Routes.SavedRecipesScreen,
                                         icon = Icons.Default.Star
                                     ),
                                 ),
-                                onItemClick = { navController.navigate(it.route) })
+                                onItemClick = {
+                                    navController.navigate(it.route)
+                                })
                         }
                     ) { innerPadding ->
                         Box(modifier = Modifier.padding(innerPadding)) {
