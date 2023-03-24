@@ -1,7 +1,6 @@
-package com.example.cheftovers.ui.recipes.screen
+package com.example.cheftovers.ui.saved_recipes
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,10 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cheftovers.R
-import com.example.cheftovers.ui.recipe_details.RecipeDetailsUIState
+import com.example.cheftovers.ui.recipe_results.RecipeCard
 import com.example.cheftovers.ui.recipe_results.RecipeResultsEvent
-import com.example.cheftovers.ui.recipes.search.RecipeCard
-import com.example.cheftovers.ui.saved_recipes.SavedRecipesViewModel
 import com.example.cheftovers.util.UiEvent
 
 @Composable

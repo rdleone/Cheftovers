@@ -13,5 +13,5 @@ sealed class RecipeResultsEvent {
      */
     data class OnCardClick(
         val recipe: Recipe
-    ): RecipeResultsEvent()
+    ) : RecipeResultsEvent()
 }

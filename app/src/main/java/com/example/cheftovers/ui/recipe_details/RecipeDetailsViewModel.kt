@@ -1,21 +1,57 @@
 package com.example.cheftovers.ui.recipe_details
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cheftovers.data.Recipe
+import com.example.cheftovers.data.RecipeDao
 import com.example.cheftovers.util.Routes
 import com.example.cheftovers.util.UiEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /**
  * Handles logic for any buttons on the recipe details screen, specifically the favorite star icon
  */
-class RecipeDetailsViewModel() : ViewModel() {
+@HiltViewModel
+class RecipeDetailsViewModel @Inject constructor(
+    private val dao: RecipeDao,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+    // Recipe attribute states
+    var recipe by mutableStateOf<Recipe?>(null)
+        private set
+    var name by mutableStateOf("")
+        private set
+    var description by mutableStateOf("")
+        private set
+    var categories by mutableStateOf(listOf(""))
+        private set
+    var rating by mutableStateOf(0.0)
+        private set
+    var prepTime by mutableStateOf(0)
+        private set
+    var cookTime by mutableStateOf(0)
+        private set
+    var totalTime by mutableStateOf(0)
+        private set
+    var ingredients by mutableStateOf(listOf(""))
+        private set
+    var steps by mutableStateOf(listOf(""))
+        private set
 
     private val _recipeDetailsState = MutableStateFlow(RecipeDetailsUIState())
     val recipeUIState: StateFlow<RecipeDetailsUIState>
@@ -25,14 +61,34 @@ class RecipeDetailsViewModel() : ViewModel() {
     val uiEvent = _uiEvent.receiveAsFlow()
 
     init {
-        _recipeDetailsState.value = recipeUIState.value.copy()
+        val recipeId = savedStateHandle.get<Int>("recipeId")!!
+        if (recipeId != -1) {
+            viewModelScope.launch(Dispatchers.IO) {
+                dao.getRecipeById(recipeId)?.let { recipe ->
+                    withContext(Dispatchers.Main) {
+                        name = recipe.name
+                        description = recipe.description ?: ""
+                        categories = recipe.categories ?: listOf("")
+                        rating = recipe.rating ?: 0.0
+                        prepTime = recipe.prep_time ?: 0
+                        cookTime = recipe.cook_time ?: 0
+                        totalTime = recipe.total_time
+                        ingredients = recipe.ingredients
+                        steps = recipe.steps
+                        Log.i("recipe", name)
+                        this@RecipeDetailsViewModel.recipe = recipe
+                        _recipeDetailsState.update { it.copy(recipe = recipe) }
+                    }
+                }
+            }
+        }
     }
 
     /**
      * Handles each type of RecipeDetailsEvent.
      */
     fun onEvent(event: RecipeDetailsEvent) {
-        when(event) {
+        when (event) {
             is RecipeDetailsEvent.OnBack -> {
                 sendUiEvent(UiEvent.Navigate(Routes.RecipeResultsScreen))
             }

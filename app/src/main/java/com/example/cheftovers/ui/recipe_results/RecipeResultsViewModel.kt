@@ -2,19 +2,28 @@ package com.example.cheftovers.ui.recipe_results
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cheftovers.data.RecipeDao
 import com.example.cheftovers.util.Routes
 import com.example.cheftovers.util.UiEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Handles logic for the Recipe Results screen, namely launching
  * a recipe's details screen from its card.
  */
-class RecipeResultsViewModel() : ViewModel() {
+@HiltViewModel
+class RecipeResultsViewModel @Inject constructor(
+    private val dao: RecipeDao
+) : ViewModel() {
 
     private val _recipeResultsState = MutableStateFlow(RecipeResultsUIState())
     val recipeResultsState: StateFlow<RecipeResultsUIState>
@@ -23,13 +32,23 @@ class RecipeResultsViewModel() : ViewModel() {
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            _recipeResultsState.update { it.copy(recipes = dao.getAllRecipes()) }
+        }
+    }
+
     /**
      * Handles each type of RecipeResultsEvent
      */
     fun onEvent(event: RecipeResultsEvent) {
         when (event) {
             is RecipeResultsEvent.OnCardClick -> {
-                sendUiEvent(UiEvent.Navigate(Routes.RecipeDetailsScreen))
+                sendUiEvent(
+                    UiEvent.Navigate(
+                        Routes.RecipeDetailsScreen + "?recipeId=${event.recipe.id}"
+                    )
+                )
             }
         }
     }

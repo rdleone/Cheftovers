@@ -8,7 +8,7 @@ package com.example.cheftovers.data
  */
 class RecipeRepositoryImpl(
     private val dao: RecipeDao
-): RecipeRepository {
+) : RecipeRepository {
 
     override suspend fun insertRecipe(recipe: Recipe) {
         dao.insertRecipe(recipe)
@@ -18,7 +18,7 @@ class RecipeRepositoryImpl(
         dao.deleteRecipe(recipe)
     }
 
-    override suspend fun getRecipeById(id: Int): Recipe? {
-        return dao.getRecipeById(id)
+    override fun getAllRecipes(): List<Recipe> {
+        return dao.getAllRecipes()
     }
 }

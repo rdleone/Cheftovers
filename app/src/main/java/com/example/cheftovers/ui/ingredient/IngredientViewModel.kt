@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
  * Handles logic for any buttons on the ingredient search screen, specifically the search button
  * This will update the variables from the IngredientUIState and be able to use it across the app.
  */
-class IngredientViewModel() : ViewModel() {
+class IngredientViewModel : ViewModel() {
 
     private val _ingrState = MutableStateFlow(IngredientUIState())
     val ingrState: StateFlow<IngredientUIState>
@@ -29,29 +29,35 @@ class IngredientViewModel() : ViewModel() {
      * Handles each type of IngredientEvent.
      */
     fun onEvent(event: IngredientEvent) {
-        when(event) {
+        when (event) {
             is IngredientEvent.AddIngredient -> {
                 event.ingrList.add(event.ingredient)
-                _ingrState.update { it.copy(event.ingrList)}
-                Log.i("ingrEvent", "Ingredient added: " +
-                        "${_ingrState.value.currentIngredientList.size}")
+                _ingrState.update { it.copy(currentIngredientList = event.ingrList) }
+                Log.i(
+                    "ingrEvent", "Ingredient added: " +
+                            "${_ingrState.value.currentIngredientList.size}"
+                )
             }
             is IngredientEvent.RemoveIngredient -> {
                 event.ingrList.remove(event.ingredient)
-                _ingrState.update { it.copy(event.ingrList) }
-                Log.i("ingrEvent", "Ingredient removed: " +
-                        "${_ingrState.value.currentIngredientList.size}")
+                _ingrState.update { it.copy(currentIngredientList = event.ingrList) }
+                Log.i(
+                    "ingrEvent", "Ingredient removed: " +
+                            "${_ingrState.value.currentIngredientList.size}"
+                )
             }
-            is IngredientEvent.onEntryError -> {
+            is IngredientEvent.OnEntryError -> {
                 Log.i("ingrEvent", "Error received")
                 sendUiEvent(UiEvent.ShowToast(event.message))
             }
-            is IngredientEvent.onFindRecipes -> {
+            is IngredientEvent.OnFindRecipes -> {
                 // It seems that update doesn't remove the old values in the list.
                 // Is this because we're updating it with .copy() ?
 //                _ingrState.update { it.copy(event.ingrList) }
-                Log.i("ingrEvent", "Final list size: " +
-                        "${_ingrState.value.currentIngredientList.size}")
+                Log.i(
+                    "ingrEvent", "Final list size: " +
+                            "${_ingrState.value.currentIngredientList.size}"
+                )
                 sendUiEvent(UiEvent.Navigate(Routes.RecipeResultsScreen))
             }
         }

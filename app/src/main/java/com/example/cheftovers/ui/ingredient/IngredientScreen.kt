@@ -204,14 +204,14 @@ fun IngredientScreen(
                 items(uiState.currentIngredientList) { item ->
                     if (isDuplicate) {
                         viewModel.onEvent(
-                            IngredientEvent.onEntryError(
+                            IngredientEvent.OnEntryError(
                                 stringResource(R.string.ingredient_alert_title1)
                             )
                         )
                         isDuplicate = false
                     } else if (isMaxListSize) {
                         viewModel.onEvent(
-                            IngredientEvent.onEntryError(
+                            IngredientEvent.OnEntryError(
                                 stringResource(R.string.ingredient_alert_title2)
                             )
                         )
@@ -245,7 +245,7 @@ fun IngredientScreen(
                         isListEmpty = true
                     } else {
                         viewModel.onEvent(
-                            IngredientEvent.onFindRecipes(uiState.currentIngredientList)
+                            IngredientEvent.OnFindRecipes(uiState.currentIngredientList)
                         )
                     }
                 },
@@ -254,7 +254,7 @@ fun IngredientScreen(
                 Text(text = stringResource(R.string.ingredient_results_button))
                 if (isListEmpty) {
                     viewModel.onEvent(
-                        IngredientEvent.onEntryError(
+                        IngredientEvent.OnEntryError(
                             stringResource(R.string.ingredient_alert_title3)
                         )
                     )
@@ -264,50 +264,6 @@ fun IngredientScreen(
         }
     }
 }
-
-//@Composable
-//fun IngredientScreenComponents(
-//    uiState: IngredientUIState,
-//    onEvent: (IngredientEvent) -> Unit,
-//    modifier: Modifier,
-//) {
-//
-//    Column(
-//        verticalArrangement = Arrangement.Center,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Row(
-//            modifier = modifier.frameModifier(),
-//            horizontalArrangement = Arrangement.Center,
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            Text(
-//                text = stringResource(R.string.ingredient_list_head),
-//                style = MaterialTheme.typography.headlineLarge
-//            )
-//        }
-//        Row(
-//            modifier = modifier
-//                .fillMaxWidth()
-//                .padding(12.dp),
-//            horizontalArrangement = Arrangement.Center,
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            Text(
-//                text = stringResource(R.string.ingredient_list_desc),
-//                style = MaterialTheme.typography.bodyLarge,
-//                textAlign = TextAlign.Center,
-//                fontSize = 20.sp
-//            )
-//        }
-//        // Experimental tag required
-//        SearchComponents(
-//            uiState = uiState,
-//            onEvent = onEvent,
-//            modifier = modifier,
-//        )
-//    }
-//}
 
 @Preview(showBackground = true)
 @Composable

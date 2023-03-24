@@ -11,5 +11,5 @@ interface RecipeRepository {
 
     suspend fun deleteRecipe(recipe: Recipe)
 
-    suspend fun getRecipeById(id: Int): Recipe?
+    fun getAllRecipes(): List<Recipe>
 }

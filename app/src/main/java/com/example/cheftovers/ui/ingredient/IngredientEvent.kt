@@ -36,7 +36,7 @@ sealed class IngredientEvent {
      *
      * @property message Message to display within the Toast
      */
-    data class onEntryError(
+    data class OnEntryError(
         val message: String
     ) : IngredientEvent()
 
@@ -46,7 +46,7 @@ sealed class IngredientEvent {
      *
      * @property ingrList Current ingredient list
      */
-    data class onFindRecipes(
+    data class OnFindRecipes(
         val ingrList: SnapshotStateList<String>
     ) : IngredientEvent()
 }

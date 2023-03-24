@@ -3,7 +3,6 @@ package com.example.cheftovers.ui.saved_recipes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cheftovers.ui.recipe_results.RecipeResultsEvent
-import com.example.cheftovers.ui.recipe_results.RecipeResultsUIState
 import com.example.cheftovers.util.Routes
 import com.example.cheftovers.util.UiEvent
 import kotlinx.coroutines.channels.Channel

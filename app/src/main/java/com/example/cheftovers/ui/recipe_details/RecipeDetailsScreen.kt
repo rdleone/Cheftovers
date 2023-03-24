@@ -25,9 +25,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cheftovers.R
-import com.example.cheftovers.data.Recipe
-import com.example.cheftovers.data.recipeSample
 import com.example.cheftovers.ui.theme.frameModifier
 import com.example.cheftovers.ui.theme.recipeDetailsModifier
 import com.example.cheftovers.util.UiEvent
@@ -38,15 +37,13 @@ import com.example.cheftovers.util.UiEvent
  *
  * @param viewModel Top level screen ViewModel
  * @param onNavigate Used by NavHost in nav map
- * @param recipe The selected recipe whose details populate this screen
  * @param modifier Default Modifier to allow compose components to have modifications
  */
 @Composable
 fun RecipeDetailsScreen(
-    viewModel: RecipeDetailsViewModel,
+    modifier: Modifier = Modifier,
+    viewModel: RecipeDetailsViewModel = hiltViewModel(),
     onNavigate: (UiEvent.Navigate) -> Unit,
-    recipe: Recipe,
-    modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.recipeUIState.collectAsState()
     LaunchedEffect(key1 = true) {
@@ -78,19 +75,22 @@ fun RecipeDetailsScreen(
                 contentDescription = ""
             )
             Text(
-                text = recipe.name,
+                text = uiState.recipe.name,
                 modifier = Modifier
                     .weight(1f),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.headlineLarge
             )
-            if (uiState.savedRecipes.contains(recipe)) {
+            if (uiState.savedRecipes.contains(uiState.recipe)) {
                 Icon(
                     painter = painterResource(id = R.drawable.star_filled),
                     modifier = Modifier
                         .size(36.dp)
-                        .clickable { viewModel.onEvent(
-                            RecipeDetailsEvent.OnFavorite(recipe, uiState.savedRecipes)) },
+                        .clickable {
+                            viewModel.onEvent(
+                                RecipeDetailsEvent.OnFavorite(uiState.recipe, uiState.savedRecipes)
+                            )
+                        },
                     contentDescription = ""
                 )
             } else {
@@ -98,28 +98,41 @@ fun RecipeDetailsScreen(
                     painter = painterResource(id = R.drawable.star_outline),
                     modifier = Modifier
                         .size(36.dp)
-                        .clickable { viewModel.onEvent(
-                            RecipeDetailsEvent.OnFavorite(recipe, uiState.savedRecipes)) },
+                        .clickable {
+                            viewModel.onEvent(
+                                RecipeDetailsEvent.OnFavorite(uiState.recipe, uiState.savedRecipes)
+                            )
+                        },
                     contentDescription = ""
                 )
             }
         }
+        // Recipe Image
         Image(
             modifier = modifier.recipeDetailsModifier(),
-            painter = painterResource(recipe.images[0]),
+            painter = painterResource(R.drawable.chicken_noodle_soup),
             contentDescription = null
         )
+        // Description
         Text(
             modifier = modifier.recipeDetailsModifier(),
-            text = recipe.desc,
+            text = uiState.recipe.description!!,
         )
+        // Total Time to Cook
         Text(
             modifier = modifier.recipeDetailsModifier(),
             text = buildAnnotatedString {
                 withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)) {
                     append(stringResource(R.string.time_to_cook))
                 }
-                append("\n" + recipe.time)
+                val totalTime = uiState.recipe.total_time
+                val hrs = totalTime / 60
+                val mins = totalTime % 60
+                when (hrs) {
+                    0 -> append("\n$mins minutes")
+                    1 -> append("\n$hrs hour, $mins minutes")
+                    else -> append("\n$hrs hours, $mins minutes")
+                }
             }
         )
         Text(
@@ -128,7 +141,7 @@ fun RecipeDetailsScreen(
                 withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)) {
                     append(stringResource(R.string.ingredients))
                 }
-                append("\n" + recipe.ingr.joinToString("\n"))
+                append("\n" + uiState.recipe.ingredients.joinToString("\n"))
             }
         )
         Text(
@@ -137,35 +150,17 @@ fun RecipeDetailsScreen(
                 withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)) {
                     append(stringResource(R.string.instructions))
                 }
-                append("\n" + recipe.steps.joinToString("\n"))
+                append("\n" + uiState.recipe.steps.joinToString("\n"))
             }
         )
     }
-//    RecipeDetailsComponents(
-//        recipe = recipe,
-//        uiState = uiState,
-//        onFavoriteClick = viewModel::onFavoriteClick,
-//        onBackPressed = viewModel::onBackPressed
-//    )
 }
-
-//@Composable
-//fun RecipeDetailsComponents(
-//    modifier: Modifier = Modifier,
-//    recipe: Recipe,
-//    uiState: RecipeDetailsUIState,
-//    onFavoriteClick: (Recipe) -> Unit,
-//    onBackPressed: () -> Unit
-//) {
-//
-//}
 
 @Preview(showBackground = true)
 @Composable
 fun RecipeDetailsScreenPreview() {
     RecipeDetailsScreen(
-        viewModel = RecipeDetailsViewModel(),
+        viewModel = hiltViewModel(),
         onNavigate = {},
-        recipe = recipeSample()
     )
 }

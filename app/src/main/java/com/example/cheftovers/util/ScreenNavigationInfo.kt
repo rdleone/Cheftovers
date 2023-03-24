@@ -13,14 +13,6 @@ object Routes {
     const val SavedRecipesScreen = "saved_recipes_screen"
 }
 
-//sealed class ScreenRoute(val route: String) {
-//    object HomeScreen: ScreenRoute(route = "home_screen")
-//    object IngredientScreen: ScreenRoute(route = "ingredient_screen")
-//    object RecipeResultsScreen: ScreenRoute(route = "recipe_results_screen")
-//    object RecipeDetailsScreen: ScreenRoute(route = "recipe_details_screen")
-//    object SavedRecipesScreen: ScreenRoute(route = "saved_recipes_screen")
-//}
-
 /**
  * Data for each badge in the navigation bar
  * @property name   Page name

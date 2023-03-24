@@ -8,5 +8,5 @@ sealed class HomeEvent {
      * Navigates user to Ingredient List screen to begin
      * using the Recipe Search.
      */
-    object OnRecipeSearch: HomeEvent()
+    object OnRecipeSearch : HomeEvent()
 }
