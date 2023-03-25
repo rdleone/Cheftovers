@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.JsonArray
+import java.time.Duration
 import javax.inject.Inject
 
 /**
@@ -34,7 +36,7 @@ class RecipeDetailsViewModel @Inject constructor(
     // Recipe attribute states
     var recipe by mutableStateOf<Recipe?>(null)
         private set
-    var name by mutableStateOf("")
+    var title by mutableStateOf("")
         private set
     var description by mutableStateOf("")
         private set
@@ -42,15 +44,15 @@ class RecipeDetailsViewModel @Inject constructor(
         private set
     var rating by mutableStateOf(0.0)
         private set
-    var prepTime by mutableStateOf(0)
+    var prepTime by mutableStateOf(Duration.ZERO)
         private set
-    var cookTime by mutableStateOf(0)
+    var cookTime by mutableStateOf(Duration.ZERO)
         private set
-    var totalTime by mutableStateOf(0)
+    var totalTime by mutableStateOf(Duration.ZERO)
         private set
     var ingredients by mutableStateOf(listOf(""))
         private set
-    var steps by mutableStateOf(listOf(""))
+    var steps by mutableStateOf(JsonArray(emptyList()))
         private set
 
     private val _recipeDetailsState = MutableStateFlow(RecipeDetailsUIState())
@@ -66,16 +68,16 @@ class RecipeDetailsViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) {
                 dao.getRecipeById(recipeId)?.let { recipe ->
                     withContext(Dispatchers.Main) {
-                        name = recipe.name
+                        title = recipe.title
                         description = recipe.description ?: ""
                         categories = recipe.categories ?: listOf("")
                         rating = recipe.rating ?: 0.0
-                        prepTime = recipe.prep_time ?: 0
-                        cookTime = recipe.cook_time ?: 0
+                        prepTime = recipe.prep_time
+                        cookTime = recipe.cook_time
                         totalTime = recipe.total_time
                         ingredients = recipe.ingredients
                         steps = recipe.steps
-                        Log.i("recipe", name)
+                        Log.i("recipe", title)
                         this@RecipeDetailsViewModel.recipe = recipe
                         _recipeDetailsState.update { it.copy(recipe = recipe) }
                     }

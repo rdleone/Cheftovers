@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -117,33 +118,33 @@ fun RecipeCard(
                     modifier = modifier
                         .fillMaxWidth()
                         .padding(4.dp),
-                    text = recipe.name,
+                    text = recipe.title,
                     fontSize = 20.sp
                 )
-                Text(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(4.dp),
-                    text = recipe.total_time.toString(),
-                    fontSize = 20.sp
-                )
-                // TODO: Fix spacing inconsistency with below version of time to cook text
 //                Text(
-//                        modifier = modifier
-//                            .fillMaxWidth()
-//                            .padding(4.dp),
-//                        text = buildAnnotatedString {
-//                            val totalTime = recipe.total_time
-//                            val hrs = totalTime / 60;
-//                            val mins = totalTime % 60
-//                            when (hrs) {
-//                                0 -> append("\n$mins minutes")
-//                                1 -> append("\n$hrs hour, $mins minutes")
-//                                else -> append("\n$hrs hours, $mins minutes")
-//                            }
-//                        },
-//                        fontSize = 20.sp
-//                    )
+//                    modifier = modifier
+//                        .fillMaxWidth()
+//                        .padding(4.dp),
+//                    text = recipe.total_time.toString(),
+//                    fontSize = 20.sp
+//                )
+                // TODO: Fix spacing inconsistency with below version of time to cook text
+                Text(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(4.dp),
+                        text = buildAnnotatedString {
+                            val totalTime = recipe.total_time
+                            val hrs = totalTime.toMinutes() / 60
+                            val mins = totalTime.toMinutes() % 60
+                            when (hrs) {
+                                0L -> append("\n$mins minutes")
+                                1L -> append("\n$hrs hour, $mins minutes")
+                                else -> append("\n$hrs hours, $mins minutes")
+                            }
+                        },
+                        fontSize = 20.sp
+                    )
             }
         }
     }

@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import com.example.cheftovers.util.Converters
 
 @TypeConverters(Converters::class)
-@Database(entities = [Recipe::class], version = 2)
-abstract class RecipeDatabase: RoomDatabase() {
+@Database(entities = [Recipe::class], version = 4)
+abstract class RecipeDatabase : RoomDatabase() {
     abstract val dao: RecipeDao
 }

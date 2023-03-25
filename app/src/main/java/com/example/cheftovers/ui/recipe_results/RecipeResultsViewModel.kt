@@ -2,7 +2,7 @@ package com.example.cheftovers.ui.recipe_results
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cheftovers.data.RecipeDao
+import com.example.cheftovers.data.RecipeRepository
 import com.example.cheftovers.util.Routes
 import com.example.cheftovers.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +22,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class RecipeResultsViewModel @Inject constructor(
-    private val dao: RecipeDao
+    private val repository: RecipeRepository
 ) : ViewModel() {
 
     private val _recipeResultsState = MutableStateFlow(RecipeResultsUIState())
@@ -34,7 +34,8 @@ class RecipeResultsViewModel @Inject constructor(
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            _recipeResultsState.update { it.copy(recipes = dao.getAllRecipes()) }
+            repository.preloadData()
+            _recipeResultsState.update { it.copy(recipes = repository.getAllRecipes()) }
         }
     }
 

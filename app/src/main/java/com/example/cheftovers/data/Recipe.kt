@@ -3,10 +3,13 @@ package com.example.cheftovers.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonArray
+import java.time.Duration
 
 /**
- * Defines a recipe based on relevant characteristics, compatible with Room
- * @property name Official name
+ * The Room database entity. Defines a recipe based on characteristics from
+ * the original JSON document
+ * @property title Official name
  * @property description Description, highlights
  * @property prep_time Time to prep
  * @property cook_time Time to cook
@@ -19,17 +22,33 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Entity
 data class Recipe(
-    val name: String = "",
-    val description: String? = "",
-    val categories: List<String>? = listOf(),
-    val rating: Double? = 0.0,
-    val prep_time: Int? = 0,
-    val cook_time: Int? = 0,
-    val total_time: Int = 0,
-    val ingredients: List<String>,
-//    val steps: JsonElement = JsonPrimitive(""),
-    val steps: List<String>,
-    val images: List<String>? = listOf(),
+    var title: String,
+    var description: String?,
+    var categories: List<String>?,
+    var rating: Double?,
+    @Serializable(with = DurationSerializer::class)
+    var prep_time: Duration,
+    @Serializable(with = DurationSerializer::class)
+    var cook_time: Duration,
+    @Serializable(with = DurationSerializer::class)
+    var total_time: Duration,
+    var ingredients: List<String>,
+    var steps: JsonArray,
+    var images: List<String>?,
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0
-)
+    var id: Int
+) {
+    constructor() : this(
+        title = "",
+        description = "",
+        categories = listOf(""),
+        rating = 0.0,
+        prep_time = Duration.ZERO,
+        cook_time = Duration.ZERO,
+        total_time = Duration.ZERO,
+        ingredients = listOf(""),
+        steps = JsonArray(emptyList()),
+        images = listOf(""),
+        id = -1
+    )
+}

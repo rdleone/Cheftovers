@@ -9,7 +9,13 @@ interface RecipeRepository {
 
     suspend fun insertRecipe(recipe: Recipe)
 
+    suspend fun insertAll(recipes: List<Recipe>)
+
     suspend fun deleteRecipe(recipe: Recipe)
 
     fun getAllRecipes(): List<Recipe>
+
+    fun getRecipeById(id: Int): Recipe?
+
+    suspend fun preloadData()
 }

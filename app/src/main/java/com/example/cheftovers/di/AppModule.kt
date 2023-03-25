@@ -2,6 +2,7 @@ package com.example.cheftovers.di
 
 import android.app.Application
 import androidx.room.Room
+import com.example.cheftovers.data.JsonLoader
 import com.example.cheftovers.data.RecipeDatabase
 import com.example.cheftovers.data.RecipeRepository
 import com.example.cheftovers.data.RecipeRepositoryImpl
@@ -22,12 +23,15 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRecipeDatabase(app: Application): RecipeDatabase {
-        return Room.databaseBuilder(
-            app, RecipeDatabase::class.java, "recipe_db"
-        )
-            .createFromAsset("database/recipe_db.db")
+        return Room.databaseBuilder(app, RecipeDatabase::class.java, "recipe_db")
             .fallbackToDestructiveMigration()
             .build()
+//        return Room.databaseBuilder(
+//            app, RecipeDatabase::class.java, "recipe_db"
+//        )
+//            .createFromAsset("database/recipe_db.db")
+//            .fallbackToDestructiveMigration()
+//            .build()
     }
 
     /**
@@ -45,7 +49,7 @@ object AppModule {
      */
     @Provides
     @Singleton
-    fun provideRecipeRepository(db: RecipeDatabase): RecipeRepository {
-        return RecipeRepositoryImpl(db.dao)
+    fun provideRecipeRepository(app: Application, db: RecipeDatabase): RecipeRepository {
+        return RecipeRepositoryImpl(db.dao, JsonLoader(app))
     }
 }

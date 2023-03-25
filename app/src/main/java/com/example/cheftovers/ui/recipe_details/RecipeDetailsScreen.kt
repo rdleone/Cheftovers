@@ -30,6 +30,8 @@ import com.example.cheftovers.R
 import com.example.cheftovers.ui.theme.frameModifier
 import com.example.cheftovers.ui.theme.recipeDetailsModifier
 import com.example.cheftovers.util.UiEvent
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
 
 /**
  * Screen that displays the expanded details of the recipe selected
@@ -75,7 +77,7 @@ fun RecipeDetailsScreen(
                 contentDescription = ""
             )
             Text(
-                text = uiState.recipe.name,
+                text = uiState.recipe.title,
                 modifier = Modifier
                     .weight(1f),
                 fontWeight = FontWeight.Bold,
@@ -126,11 +128,11 @@ fun RecipeDetailsScreen(
                     append(stringResource(R.string.time_to_cook))
                 }
                 val totalTime = uiState.recipe.total_time
-                val hrs = totalTime / 60
-                val mins = totalTime % 60
+                val hrs = totalTime.toMinutes() / 60
+                val mins = totalTime.toMinutes() % 60
                 when (hrs) {
-                    0 -> append("\n$mins minutes")
-                    1 -> append("\n$hrs hour, $mins minutes")
+                    0L -> append("\n$mins minutes")
+                    1L -> append("\n$hrs hour, $mins minutes")
                     else -> append("\n$hrs hours, $mins minutes")
                 }
             }
@@ -150,7 +152,13 @@ fun RecipeDetailsScreen(
                 withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)) {
                     append(stringResource(R.string.instructions))
                 }
-                append("\n" + uiState.recipe.steps.joinToString("\n"))
+                val jsonArray = uiState.recipe.steps
+                for(el in jsonArray) {
+                    val obj = el.jsonObject
+                    val step = obj["step"]
+                    val instruction = obj["instruction"].toString().removeSurrounding("\"")
+                    append("\n$step. $instruction\n")
+                }
             }
         )
     }
