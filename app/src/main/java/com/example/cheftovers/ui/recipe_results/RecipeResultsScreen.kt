@@ -1,41 +1,40 @@
-package com.example.cheftovers.ui.recipes.search
+package com.example.cheftovers.ui.recipe_results
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import com.example.cheftovers.R
-import com.example.cheftovers.data.Recipe
-import com.example.cheftovers.ui.recipe_results.RecipeResultsEvent
-import com.example.cheftovers.ui.recipe_results.RecipeResultsViewModel
+import com.example.cheftovers.data.recipe.Recipe
 import com.example.cheftovers.ui.theme.cardImageModifier
 import com.example.cheftovers.ui.theme.frameModifier
 import com.example.cheftovers.util.UiEvent
 
 @Composable
 fun RecipeResultsScreen(
-    // TODO: Replace dummy data
-    viewModel: RecipeResultsViewModel,
-    onNavigate: (UiEvent.Navigate) -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: RecipeResultsViewModel = hiltViewModel(),
+    onNavigate: (UiEvent.Navigate) -> Unit,
 ) {
-    val uiState by viewModel.recipeResultsState.collectAsState()
-//    val context = LocalContext.current
+//    val uiState by viewModel.recipeResultsState.collectAsState()
+    val recipeList = viewModel.recipePager.collectAsLazyPagingItems()
+
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
@@ -56,52 +55,23 @@ fun RecipeResultsScreen(
             )
         }
         LazyColumn {
-            items(items = uiState.recipes) { recipe ->
-                RecipeCard(
-                    onCardClicked = {
-                        viewModel.onEvent(
-                            RecipeResultsEvent.OnCardClick(recipe)
-                        )
-                    },
-                    recipe = recipe,
-                    modifier = modifier
-                )
+            items(items = recipeList) { recipe ->
+                recipe?.let {
+                    RecipeCard(
+                        onCardClicked = {
+                            viewModel.onEvent(
+                                RecipeResultsEvent.OnCardClick(recipe)
+                            )
+                        },
+                        recipe = recipe,
+                        modifier = modifier
+                    )
+                }
+
             }
         }
     }
-
-//    RecipeResultsComponents(
-//        uiState = uiState,
-//        onCardClicked = recipeViewModel::onCardClicked
-//    )
 }
-
-//@Composable
-//fun RecipeResultsComponents(
-//    modifier: Modifier = Modifier,
-//    uiState: RecipeUIState,
-//    // TODO: Replace dummy data
-//    onCardClicked: () -> Unit,
-//    recipes: List<Recipe> = List(10) { recipeSample() }
-//) {
-//    Column(modifier = modifier.fillMaxSize()) {
-//        Row(
-//            modifier = Modifier.frameModifier(),
-//            horizontalArrangement = Arrangement.Center,
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            Text(
-//                text = stringResource(R.string.recipe_results_head),
-//                style = MaterialTheme.typography.headlineLarge
-//            )
-//        }
-//        LazyColumn {
-//            items(items = recipes) { recipe ->
-//                RecipeCard(onCardClicked = onCardClicked, recipe = recipe)
-//            }
-//        }
-//    }
-//}
 
 /**
  * Card displaying recipe data. When clicked, navigates user to
@@ -122,21 +92,17 @@ fun RecipeCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .clickable(
-                onClick = { onCardClicked() }
-            ),
+            .clickable(onClick = { onCardClicked() }),
         shape = RectangleShape,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.onSecondary
         ),
-        elevation = CardDefaults.cardElevation(5.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
         border = BorderStroke(
             width = 1.dp,
             color = MaterialTheme.colorScheme.outline,
         ),
-        onClick = {
-            onCardClicked()
-        }
+        onClick = { onCardClicked() }
     ) {
         Row(
             modifier = modifier.fillMaxWidth(),
@@ -146,24 +112,41 @@ fun RecipeCard(
             Image(
                 modifier = modifier.cardImageModifier(),
                 // TODO: Replace hardcoded image
-                painter = painterResource(recipe.images[0]),
+                painter = painterResource(R.drawable.chicken_noodle_soup),
                 contentDescription = null,
             )
             Column {
                 Text(
                     modifier = modifier
                         .fillMaxWidth()
-                        .padding(5.dp),
-                    text = recipe.name,
+                        .padding(4.dp),
+                    text = recipe.title,
                     fontSize = 20.sp
                 )
+//                Text(
+//                    modifier = modifier
+//                        .fillMaxWidth()
+//                        .padding(4.dp),
+//                    text = recipe.total_time.toString(),
+//                    fontSize = 20.sp
+//                )
+                // TODO: Fix spacing inconsistency with below version of time to cook text
                 Text(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(5.dp),
-                    text = recipe.time,
-                    fontSize = 20.sp
-                )
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(4.dp),
+                        text = buildAnnotatedString {
+                            val totalTime = recipe.total_time
+                            val hrs = totalTime.toMinutes() / 60
+                            val mins = totalTime.toMinutes() % 60
+                            when (hrs) {
+                                0L -> append("\n$mins minutes")
+                                1L -> append("\n$hrs hour, $mins minutes")
+                                else -> append("\n$hrs hours, $mins minutes")
+                            }
+                        },
+                        fontSize = 20.sp
+                    )
             }
         }
     }
@@ -173,7 +156,7 @@ fun RecipeCard(
 @Composable
 fun RecipeResultsPreview() {
     RecipeResultsScreen(
-        viewModel = RecipeResultsViewModel(),
+        viewModel = hiltViewModel(),
         onNavigate = {}
     )
 }

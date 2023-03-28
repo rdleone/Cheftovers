@@ -14,12 +14,21 @@ import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.cheftovers.ui.home.HomeScreen
+import com.example.cheftovers.ui.ingredient.IngredientScreen
+import com.example.cheftovers.ui.recipe_details.RecipeDetailsScreen
+import com.example.cheftovers.ui.recipe_results.RecipeResultsScreen
+import com.example.cheftovers.ui.saved_recipes.SavedRecipesScreen
 import com.example.cheftovers.ui.theme.CheftoversTheme
 import com.example.cheftovers.ui.theme.secularoneFamily
 import com.example.cheftovers.util.BottomNavBar
 import com.example.cheftovers.util.BottomNavItem
-import com.example.cheftovers.util.Navigation
 import com.example.cheftovers.util.Routes
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,8 +45,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // Scaffold provides a neat little slot specifically
-                    // for bottom and top bars
+                    // Scaffold provides a neat little slot specifically for bottom and top bars
                     Scaffold(
                         topBar = {
                             CenterAlignedTopAppBar(
@@ -80,7 +88,47 @@ class MainActivity : ComponentActivity() {
                         }
                     ) { innerPadding ->
                         Box(modifier = Modifier.padding(innerPadding)) {
-                            Navigation(navController = navController)
+                            NavHost(
+                                navController = navController,
+                                startDestination = Routes.HomeScreen
+                            ) {
+                                composable(route = Routes.HomeScreen) {
+                                    HomeScreen(
+                                        viewModel = viewModel(),
+                                        onNavigate = { navController.navigate(it.route) }
+                                    )
+                                }
+                                composable(Routes.IngredientScreen) {
+                                    IngredientScreen(
+                                        viewModel = viewModel(),
+                                        onNavigate = { navController.navigate(it.route) }
+                                    )
+                                }
+                                composable(route = Routes.RecipeResultsScreen) {
+                                    RecipeResultsScreen(
+                                        onNavigate = { navController.navigate(it.route) }
+                                    )
+                                }
+                                composable(
+                                    route = Routes.RecipeDetailsScreen + "?recipeId={recipeId}",
+                                    arguments = listOf(
+                                        navArgument(name = "recipeId") {
+                                            type = NavType.IntType
+                                            defaultValue = -1
+                                        }
+                                    )
+                                ) {
+                                    RecipeDetailsScreen(
+                                        onNavigate = { navController.navigate(it.route) },
+                                    )
+                                }
+                                composable(route = Routes.SavedRecipesScreen) {
+                                    SavedRecipesScreen(
+                                        viewModel = viewModel(),
+                                        onNavigate = { navController.navigate(it.route) }
+                                    )
+                                }
+                            }
                         }
                     }
                 }

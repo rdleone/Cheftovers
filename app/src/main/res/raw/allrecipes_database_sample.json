@@ -1,0 +1,137 @@
+[
+  {
+    "images": [
+      "238874.jpg",
+      "244858.jpg",
+      "251127.jpg",
+      "331918.jpg",
+      "354580.jpg",
+      "359645.jpg",
+      "482319.jpg",
+      "632127.jpg",
+      "1037375.jpg",
+      "1109398.jpg",
+      "7163377.jpg",
+      "362521.jpg"
+    ],
+    "categories": [
+      "Meat and Poultry",
+      "Pork"
+    ],
+    "ingredients": [
+      "1 (2 1/2 pound) boneless pork loin roast, rolled and tied",
+      "1 teaspoon salt",
+      "1/2 teaspoon black pepper",
+      "2 tablespoons vegetable oil",
+      "2 tablespoons butter",
+      "3 cups whole milk",
+      "1 teaspoon chopped fresh rosemary",
+      "1 clove garlic, minced",
+      "3 tablespoons water"
+    ],
+    "steps": [
+      {
+        "step": 1,
+        "instruction": "Season pork loin with salt and pepper. Heat oil and butter in a large pot over medium-high heat and brown pork loin on all sides. Slowly pour the milk in with the pork. Stir in the rosemary and garlic. Allow the milk to come to boil, then lower the heat to medium-low. Partially cover with the lid and cook until the pork is no longer pink in the center, about 1 hour and 45 minutes. An instant-read thermometer inserted into the center should read 145 degrees F (63 degrees C). Remove pork and set aside to rest."
+      },
+      {
+        "step": 2,
+        "instruction": "If the milk is not already a nutty brown color, increase the heat until the milk beings to brown. Spoon off any additional fat. Pour the water into the pan, and bring to a boil while scraping the browned bits of food off of the bottom of the pan with a wooden spoon. Slice the pork and serve with the milk sauce."
+      }
+    ],
+    "id": "200620",
+    "name": "milk-braised-pork-loin",
+    "title": "Milk Braised Pork Loin",
+    "description": "So simple but amazingly good.  The pork comes out very tender and juicy while the milk reduces down to create a savory brown sauce.  All this in 1 pot.",
+    "rating": "4.44155836105347",
+    "prep_time": "PT5M",
+    "cook_time": "PT1H55M",
+    "total_time": "PT2H",
+    "nutritional_information": {
+      "calories": "313",
+      "servings": "8",
+      "total_fat": "20.7g",
+      "saturated_fat": "8.0g",
+      "cholesterol": "84mg",
+      "sodium": "388mg",
+      "potassium": "450mg",
+      "total_carbohydrate": "4.4g",
+      "dietry_fibre": "0.1g",
+      "protein": "25.9g",
+      "sugars": "4g",
+      "vitamin_a": "190IU",
+      "vitamin_c": "1mg",
+      "calcium": "124mg",
+      "iron": "1mg",
+      "thiamin": "1mg",
+      "niacin": "10mg",
+      "vitamin_b6": "0mg",
+      "magnesium": "26mg",
+      "folate": "7mcg"
+    },
+    "notes": "Partner Tip\r\nReynolds&#174; Aluminum foil can be used to keep food moist, cook it evenly, and make clean-up easier."
+  },
+  {
+    "images": [
+      "6807791.jpg",
+      "785360.jpg"
+    ],
+    "categories": [
+      "Meat and Poultry",
+      "Pork"
+    ],
+    "ingredients": [
+      "2 pounds large shrimp, peeled and deveined and butterflied",
+      "8 ounces sharp Cheddar cheese, cut into strips",
+      "3 fresh jalapeno peppers, seeded",
+      "1 teaspoon garlic powder",
+      "1 teaspoon Old Bay Seasoning TM, or to taste",
+      "2 pounds thick cut bacon"
+    ],
+    "steps": [
+      {
+        "step": 1,
+        "instruction": "Cut the jalapeno peppers into thin strips. Place a strip or two of jalapeno pepper and cheddar cheese inside each shrimp."
+      },
+      {
+        "step": 2,
+        "instruction": "Sprinkle the stuffed shrimp with garlic powder and Old Bay Seasoning TM. Wrap each shrimp with a slice of bacon and secure with a toothpick. Thread shrimp onto skewers."
+      },
+      {
+        "step": 3,
+        "instruction": "Grill over medium high heat for 10 to 15 minutes, or until firm."
+      }
+    ],
+    "id": "20099",
+    "name": "cheddar-jalapeno-shrimp",
+    "title": "Cheddar Jalapeno Shrimp",
+    "description": "This is a real crowd pleaser! We never have any left!  We cook these on the grill, but you can also dip them in tempura batter and deep fry them.",
+    "rating": "4.05263137817383",
+    "prep_time": "PT20M",
+    "cook_time": "PT10M",
+    "total_time": "PT30M",
+    "nutritional_information": {
+      "calories": "852",
+      "servings": "8",
+      "total_fat": "71.5g",
+      "saturated_fat": "25.0g",
+      "cholesterol": "264mg",
+      "sodium": "1495mg",
+      "potassium": "480mg",
+      "total_carbohydrate": "11.9g",
+      "dietry_fibre": "0.6g",
+      "protein": "39.3g",
+      "sugars": "0g",
+      "vitamin_a": "536IU",
+      "vitamin_c": "4mg",
+      "calcium": "271mg",
+      "iron": "2mg",
+      "thiamin": "1mg",
+      "niacin": "15mg",
+      "vitamin_b6": "0mg",
+      "magnesium": "58mg",
+      "folate": "26mcg"
+    },
+    "notes": "Partner Tip\r\nReynolds&#174; Aluminum foil can be used to keep food moist, cook it evenly, and make clean-up easier."
+  }
+]

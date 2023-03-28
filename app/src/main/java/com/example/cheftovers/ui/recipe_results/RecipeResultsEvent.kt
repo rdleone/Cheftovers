@@ -1,6 +1,6 @@
 package com.example.cheftovers.ui.recipe_results
 
-import com.example.cheftovers.data.Recipe
+import com.example.cheftovers.data.recipe.Recipe
 
 /**
  * User-initiated events on the Recipe Results AND Saved Recipes screen
@@ -13,5 +13,5 @@ sealed class RecipeResultsEvent {
      */
     data class OnCardClick(
         val recipe: Recipe
-    ): RecipeResultsEvent()
+    ) : RecipeResultsEvent()
 }

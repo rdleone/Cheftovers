@@ -21,7 +21,7 @@ class HomeViewModel() : ViewModel() {
      * Handles each type of HomeEvent.
      */
     fun onEvent(event: HomeEvent) {
-        when(event) {
+        when (event) {
             is HomeEvent.OnRecipeSearch -> {
                 sendUiEvent(UiEvent.Navigate(Routes.IngredientScreen))
             }

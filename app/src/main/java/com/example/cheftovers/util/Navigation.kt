@@ -8,63 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.cheftovers.data.recipeSample
-import com.example.cheftovers.ui.home.HomeScreen
-import com.example.cheftovers.ui.home.HomeViewModel
-import com.example.cheftovers.ui.ingredient.IngredientScreen
-import com.example.cheftovers.ui.ingredient.IngredientViewModel
-import com.example.cheftovers.ui.recipe_details.RecipeDetailsScreen
-import com.example.cheftovers.ui.recipe_details.RecipeDetailsViewModel
-import com.example.cheftovers.ui.recipe_results.RecipeResultsViewModel
-import com.example.cheftovers.ui.recipes.screen.SavedRecipesScreen
-import com.example.cheftovers.ui.recipes.search.RecipeResultsScreen
-import com.example.cheftovers.ui.saved_recipes.SavedRecipesViewModel
-
-/**
- * Functionality for navigation between each screen using host navController
- */
-@Composable
-fun Navigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Routes.HomeScreen) {
-        composable(route = Routes.HomeScreen) {
-            HomeScreen(
-                viewModel = viewModel<HomeViewModel>(),
-                onNavigate = { navController.navigate(it.route) }
-            )
-        }
-        composable(Routes.IngredientScreen) {
-            IngredientScreen(
-                viewModel = viewModel<IngredientViewModel>(),
-                onNavigate = { navController.navigate(it.route) }
-            )
-        }
-        composable(route = Routes.RecipeResultsScreen) {
-            RecipeResultsScreen(
-                viewModel = viewModel<RecipeResultsViewModel>(),
-                onNavigate = { navController.navigate(it.route) }
-            )
-        }
-        composable(route = Routes.RecipeDetailsScreen) {
-            RecipeDetailsScreen(
-                viewModel = viewModel<RecipeDetailsViewModel>(),
-                onNavigate = { navController.navigate(it.route) },
-                recipe = recipeSample()
-            )
-        }
-        composable(route = Routes.SavedRecipesScreen) {
-            SavedRecipesScreen(
-                viewModel = viewModel<SavedRecipesViewModel>(),
-                onNavigate = { navController.navigate(it.route) }
-            )
-        }
-    }
-}
 
 /**
  * Modified NavigationBar that uses the BottomNavItem data class

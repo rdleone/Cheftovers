@@ -2,8 +2,8 @@ package com.example.cheftovers.ui.recipe_details
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.example.cheftovers.data.Recipe
-import com.example.cheftovers.data.recipeSample
+import com.example.cheftovers.data.recipe.Recipe
+import com.example.cheftovers.data.recipe.recipeSample
 
 /**
  * Recipe state for Recipe Details ViewModel
