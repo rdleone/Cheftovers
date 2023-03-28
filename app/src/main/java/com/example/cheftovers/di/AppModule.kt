@@ -1,11 +1,9 @@
 package com.example.cheftovers.di
 
 import android.app.Application
-import androidx.room.Room
-import com.example.cheftovers.data.JsonLoader
-import com.example.cheftovers.data.RecipeDatabase
-import com.example.cheftovers.data.RecipeRepository
-import com.example.cheftovers.data.RecipeRepositoryImpl
+import com.example.cheftovers.data.recipe.RecipeDatabase
+import com.example.cheftovers.data.recipe.RecipeRepository
+import com.example.cheftovers.data.recipe.RecipeRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,15 +21,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRecipeDatabase(app: Application): RecipeDatabase {
-        return Room.databaseBuilder(app, RecipeDatabase::class.java, "recipe_db")
-            .fallbackToDestructiveMigration()
-            .build()
-//        return Room.databaseBuilder(
-//            app, RecipeDatabase::class.java, "recipe_db"
-//        )
-//            .createFromAsset("database/recipe_db.db")
+//        return Room.databaseBuilder(app, RecipeDatabase::class.java, "recipe_db")
 //            .fallbackToDestructiveMigration()
 //            .build()
+        return RecipeDatabase.getInstance(app)
     }
 
     /**
@@ -50,6 +43,6 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRecipeRepository(app: Application, db: RecipeDatabase): RecipeRepository {
-        return RecipeRepositoryImpl(db.dao, JsonLoader(app))
+        return RecipeRepositoryImpl(db.dao)
     }
 }

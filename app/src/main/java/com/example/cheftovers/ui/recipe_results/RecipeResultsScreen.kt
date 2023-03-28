@@ -5,12 +5,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -21,21 +18,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import com.example.cheftovers.R
-import com.example.cheftovers.data.Recipe
+import com.example.cheftovers.data.recipe.Recipe
 import com.example.cheftovers.ui.theme.cardImageModifier
 import com.example.cheftovers.ui.theme.frameModifier
 import com.example.cheftovers.util.UiEvent
 
 @Composable
 fun RecipeResultsScreen(
-    // TODO: Replace dummy data
     modifier: Modifier = Modifier,
     viewModel: RecipeResultsViewModel = hiltViewModel(),
     onNavigate: (UiEvent.Navigate) -> Unit,
 ) {
-    val uiState by viewModel.recipeResultsState.collectAsState()
-//    val context = LocalContext.current
+//    val uiState by viewModel.recipeResultsState.collectAsState()
+    val recipeList = viewModel.recipePager.collectAsLazyPagingItems()
+
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
@@ -56,16 +55,19 @@ fun RecipeResultsScreen(
             )
         }
         LazyColumn {
-            items(items = uiState.recipes) { recipe ->
-                RecipeCard(
-                    onCardClicked = {
-                        viewModel.onEvent(
-                            RecipeResultsEvent.OnCardClick(recipe)
-                        )
-                    },
-                    recipe = recipe,
-                    modifier = modifier
-                )
+            items(items = recipeList) { recipe ->
+                recipe?.let {
+                    RecipeCard(
+                        onCardClicked = {
+                            viewModel.onEvent(
+                                RecipeResultsEvent.OnCardClick(recipe)
+                            )
+                        },
+                        recipe = recipe,
+                        modifier = modifier
+                    )
+                }
+
             }
         }
     }

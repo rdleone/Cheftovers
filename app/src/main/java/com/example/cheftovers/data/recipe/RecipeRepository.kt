@@ -1,4 +1,4 @@
-package com.example.cheftovers.data
+package com.example.cheftovers.data.recipe
 
 /**
  * Repository for fetching recipes.
@@ -13,9 +13,7 @@ interface RecipeRepository {
 
     suspend fun deleteRecipe(recipe: Recipe)
 
-    fun getAllRecipes(): List<Recipe>
+    suspend fun getAllRecipes(): List<Recipe>
 
     fun getRecipeById(id: Int): Recipe?
-
-    suspend fun preloadData()
 }

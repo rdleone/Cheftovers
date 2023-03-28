@@ -1,6 +1,6 @@
 package com.example.cheftovers.ui.recipe_results
 
-import com.example.cheftovers.data.Recipe
+import com.example.cheftovers.data.recipe.Recipe
 
 /**
  * Recipe state for Recipe Results and Saved Recipes ViewModel

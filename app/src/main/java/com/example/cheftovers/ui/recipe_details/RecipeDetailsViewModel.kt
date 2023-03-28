@@ -7,8 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cheftovers.data.Recipe
-import com.example.cheftovers.data.RecipeDao
+import com.example.cheftovers.data.recipe.Recipe
+import com.example.cheftovers.data.recipe.RecipeDao
 import com.example.cheftovers.util.Routes
 import com.example.cheftovers.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -77,7 +77,7 @@ class RecipeDetailsViewModel @Inject constructor(
                         totalTime = recipe.total_time
                         ingredients = recipe.ingredients
                         steps = recipe.steps
-                        Log.i("recipe", title)
+//                        Log.i("recipe", title)
                         this@RecipeDetailsViewModel.recipe = recipe
                         _recipeDetailsState.update { it.copy(recipe = recipe) }
                     }

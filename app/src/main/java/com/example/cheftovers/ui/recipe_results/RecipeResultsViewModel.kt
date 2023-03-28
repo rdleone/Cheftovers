@@ -2,17 +2,18 @@ package com.example.cheftovers.ui.recipe_results
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cheftovers.data.RecipeRepository
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
+import com.example.cheftovers.data.recipe.RecipePagingSource
+import com.example.cheftovers.data.recipe.RecipeRepository
 import com.example.cheftovers.util.Routes
 import com.example.cheftovers.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,12 +33,9 @@ class RecipeResultsViewModel @Inject constructor(
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    init {
-        CoroutineScope(Dispatchers.IO).launch {
-            repository.preloadData()
-            _recipeResultsState.update { it.copy(recipes = repository.getAllRecipes()) }
-        }
-    }
+    val recipePager = Pager(PagingConfig(pageSize = 10)) {
+        RecipePagingSource(repository)
+    }.flow.cachedIn(viewModelScope)
 
     /**
      * Handles each type of RecipeResultsEvent

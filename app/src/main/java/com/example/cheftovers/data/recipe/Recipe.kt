@@ -1,7 +1,8 @@
-package com.example.cheftovers.data
+package com.example.cheftovers.data.recipe
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.cheftovers.data.DurationSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonArray
 import java.time.Duration

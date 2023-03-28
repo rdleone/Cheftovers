@@ -1,18 +1,24 @@
 package com.example.cheftovers.data
 
 import android.content.Context
+import androidx.room.RoomDatabase
 import com.example.cheftovers.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 
-class JsonLoader(private val context: Context) {
-    private val json: Json = Json { ignoreUnknownKeys = true }
-
-    suspend fun loadRecipes(): List<Recipe> = withContext(Dispatchers.IO) {
-        val jsonString = context.resources.openRawResource(R.raw.allrecipes_database_sample)
-            .bufferedReader().use { it.readText() }
-        json.decodeFromString(jsonString)
-    }
-}
+//class JsonLoader(private val context: Context) : RoomDatabase.Callback() {
+//    private val json: Json = Json { ignoreUnknownKeys = true }
+//
+//    @OptIn(ExperimentalSerializationApi::class)
+//    suspend fun loadRecipes(): List<Recipe> = withContext(Dispatchers.IO) {
+//        val inputStream = context.resources.openRawResource(R.raw.allrecipes_database)
+//        json.decodeFromStream(inputStream)
+//
+////        val jsonString = context.resources.openRawResource(R.raw.allrecipes_database)
+////            .bufferedReader().use { it.readText() }
+////        json.decodeFromString(jsonString)
+//    }
+//}

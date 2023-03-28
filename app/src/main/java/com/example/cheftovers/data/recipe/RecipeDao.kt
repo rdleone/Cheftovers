@@ -1,9 +1,9 @@
-package com.example.cheftovers.data
+package com.example.cheftovers.data.recipe
 
 import androidx.room.*
 
 /**
- * Data access object for Recipe data class
+ * The data access object for the Recipe database
  */
 @Dao
 interface RecipeDao {
@@ -18,7 +18,7 @@ interface RecipeDao {
     suspend fun deleteRecipe(recipe: Recipe)
 
     @Query("SELECT * FROM recipe ORDER BY title ASC")
-    fun getAllRecipes(): List<Recipe>
+    suspend fun getAllRecipes(): List<Recipe>
 
     @Query("SELECT * FROM recipe WHERE id = :id")
     fun getRecipeById(id: Int): Recipe?

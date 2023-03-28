@@ -1,6 +1,6 @@
 package com.example.cheftovers.ui.recipe_results
 
-import com.example.cheftovers.data.Recipe
+import com.example.cheftovers.data.recipe.Recipe
 
 /**
  * User-initiated events on the Recipe Results AND Saved Recipes screen

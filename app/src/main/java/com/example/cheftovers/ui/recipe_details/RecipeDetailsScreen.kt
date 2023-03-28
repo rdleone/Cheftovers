@@ -127,6 +127,7 @@ fun RecipeDetailsScreen(
                 withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)) {
                     append(stringResource(R.string.time_to_cook))
                 }
+//                append(uiState.recipe.total_time.toString())
                 val totalTime = uiState.recipe.total_time
                 val hrs = totalTime.toMinutes() / 60
                 val mins = totalTime.toMinutes() % 60

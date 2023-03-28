@@ -1,4 +1,4 @@
-package com.example.cheftovers.data
+package com.example.cheftovers.data.recipe
 
 /**
  * Dummy recipe for testing

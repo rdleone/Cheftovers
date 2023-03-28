@@ -1,5 +1,6 @@
 package com.example.cheftovers.util
 
+import android.util.Log
 import androidx.room.TypeConverter
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -26,7 +27,10 @@ class Converters {
 
     @TypeConverter
     fun toJsonString(value: JsonArray): String {
-        return Json.encodeToString(value)
+        val str = Json.encodeToString(value)
+//        Log.i("recipe",str)
+        return str
+//        return Json.encodeToString(value)
     }
 
     @TypeConverter

@@ -1,7 +1,5 @@
-package com.example.cheftovers.data
+package com.example.cheftovers.data.recipe
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -12,7 +10,6 @@ import javax.inject.Inject
  */
 class RecipeRepositoryImpl @Inject constructor(
     private val dao: RecipeDao,
-    private val jsonLoader: JsonLoader
 ) : RecipeRepository {
 
     override suspend fun insertRecipe(recipe: Recipe) {
@@ -27,16 +24,11 @@ class RecipeRepositoryImpl @Inject constructor(
         dao.deleteRecipe(recipe)
     }
 
-    override fun getAllRecipes(): List<Recipe> {
+    override suspend fun getAllRecipes(): List<Recipe> {
         return dao.getAllRecipes()
     }
 
     override fun getRecipeById(id: Int): Recipe? {
         return dao.getRecipeById(id)
-    }
-
-    override suspend fun preloadData() = withContext(Dispatchers.IO) {
-        val recipes = jsonLoader.loadRecipes()
-        dao.insertAll(recipes)
     }
 }

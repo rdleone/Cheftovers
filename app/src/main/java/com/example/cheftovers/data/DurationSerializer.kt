@@ -1,5 +1,6 @@
 package com.example.cheftovers.data
 
+import android.util.Log
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializer
@@ -26,6 +27,14 @@ object DurationSerializer : KSerializer<Duration> {
     }
 
     override fun deserialize(decoder: Decoder): Duration {
-        return Duration.parse(decoder.decodeString())
+        // Imagine having invalid Duration strings in your JSON file
+        // that need to be accounted for. Couldn't be me
+        val str = decoder.decodeString()
+        val res = try {
+            Duration.parse(str)
+        } catch(e: Exception) {
+            Duration.ZERO
+        }
+        return res
     }
 }
